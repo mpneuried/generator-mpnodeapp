@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - '0.10'
+before_install:
+  - currentfolder=${PWD##*/}
+  - if [ "$currentfolder" != 'generator-mpnodeapp' ]; then cd .. && eval "mv $currentfolder generator-mpnodeapp" && cd generator-mpnodeapp; fi
+

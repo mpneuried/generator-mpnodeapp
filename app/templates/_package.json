@@ -1,0 +1,61 @@
+{
+  "name": "mymilon",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [],
+  "homepage": "https://github.com/mpneuried/mymilon",
+  "bugs": "https://github.com/mpneuried/mymilon/issues",
+  "author": {
+    "name": "M. Peter",
+    "email": "",
+    "url": "https://github.com/mpneuried"
+  },
+  "main": "./lib/mymilon.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mpneuried/mymilon.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "4.9.x",
+    "morgan": "1.3.x",
+    "compression": "1.1.x",
+    "serve-static": "1.6.x",
+    "body-parser": "1.9.x",
+    "cookie-parser": "1.3.x",
+    "hyperquest": "0.2.x",
+    "lodash": "2.4.x",
+    "mpbasic": "0.0.x",
+    "extend": "1.2.x",
+    "node-cache": "1.x",
+    "redis": "0.12.x",
+    "hiredis": "0.1.x",
+    "bluebird": "2.3.x",
+    "bcrypt": "0.8.x",
+    "connect-redis-sessions": "1.0.x",
+    "nunjucks": "1.1.x",
+    "jquery": "2.1.x",
+    "bootstrap": "3.3.x",
+    "i18n-abide": "0.0.x"
+  },
+  "devDependencies": {
+    "grunt": "0.4.x",
+    "request": "*",
+    "grunt-regarde": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-coffee": "*",
+    "grunt-contrib-compress": "*",
+    "grunt-contrib-stylus": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-cssmin": "*",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-nunjucks": "0.1.x",
+    "grunt-jasmine-node": "0.2.x",
+    "grunt-browserify": "3.1.x",
+    "grunt-ssh": "*",
+    "grunt-docker": "0.0.8",
+    "frisby": "0.8.x",
+    "grunt-i18n-abide": "0.0.12"
+  }
+}

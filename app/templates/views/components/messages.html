@@ -1,0 +1,18 @@
+{% extends "components/_box.html" %}
+
+{% set boxsize = "mw" %}
+{% set boxtheme = "light" %}
+{% set positionM = "1-2" %}
+{% set positionL = "1-3" %}
+
+{% set count = 3 %}
+
+{% block boxcontent %}
+<div class="block-content">
+	<span class="xlarge">{{ gettext("News")}}</span>
+</div>
+{% endblock %}
+
+{% block boxfooter %}
+	<h4 class="block-footer">{{ gettext( "5 neue Nachrichten", count )}}</h4>
+{% endblock %}

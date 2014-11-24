@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" dir="{{ lang_dir }}">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0, minimal-ui" />
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>{{title}}</title>
+
+		<link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Montserrat:400,700">
+		<!-- Bootstrap core CSS -->
+		<link href="/css/external.css" rel="stylesheet">
+		<!-- Custom styles for this template -->
+		<link href="/css/login.css" rel="stylesheet">
+	</head>
+
+	<body class="login">
+		<div class="container login">
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 loginrow">
+					<p class="logo">
+						<img src="/img/milon_logo_full.png" />
+					</p>
+
+					{% block body %}{% endblock %}
+
+				</div>
+			</div>
+		</div> <!-- /container -->
+		
+		<script src="/js/login.js?v={{version}}"></script>
+
+	</body>
+</html>

@@ -1,0 +1,6 @@
+<div{% if boxid %} id="{{boxid}}"{% endif %} class="block block-{% if boxsize %}{{boxsize}}{% else %}m{% endif %}{% if boxtheme %} block-{{boxtheme}}{% endif %}{% if positionL %} block-posl-{{positionL}}{% endif %}{% if positionM %} block-posm-{{positionM}}{% endif %}">
+	{% block boxcontent %}{% endblock %}
+
+	{% block boxfooter %}{% endblock %}
+</div>
+

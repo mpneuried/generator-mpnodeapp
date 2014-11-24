@@ -1,0 +1,164 @@
+/* Space out content a bit */
+html
+body
+	height 100%
+	
+body
+	padding 0
+	font-family mainFont
+	background-color bgColor
+	if dark( bgColor )
+		color lightText
+	else
+		color darkText
+
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.footer
+	padding-right 15px
+	padding-left 15px
+
+h1, h2, h3, h4
+	font-family headerFont
+
+.container.main
+	margin-top 65px
+	
+.headwrp
+	background-color clNavbar
+	z-index 1000
+	position fixed
+	top 0
+	left 0
+	right 0
+	transition all .2s
+	opacity 1
+	box-shadow	0 0 10px rgba( black, 0 )
+	padding 10px 0
+	.header
+	h3
+		transition margin .2s
+
+.headwrp.affix
+	opacity .95
+	box-shadow 0 0 10px rgba( black, .3 )
+	.header
+		margin 0 0
+
+
+h2
+	font-weight 200
+	font-size 20px
+	text-align center
+	padding 0 0 10px
+	margin 40px 20% 0		
+
+/* Custom page header */
+.header
+	margin 4px 0 
+	position relative
+	a
+	.user
+		if light( clNavbar ) && light( bgColor )
+			color darkText
+		else if dark( clNavbar )
+			color lightText
+		else
+			color clLink
+	
+	_header_height = 32px
+	.logo
+		position absolute
+		top 0
+		right 0
+		line-height _header_height
+	
+	.user
+		h3
+			display block
+			line-height _header_height
+			font-size 18px
+			font-weight 400
+			margin 0
+			margin-left _header_height + 10px
+			padding 0
+			
+		
+		.userimg
+			float left
+			width _header_height
+			height _header_height
+			border 1px solid clNavbar + 50%
+			border-radius ( _header_height / 2 )
+
+a
+	color clLink
+a:active
+a:hover
+	color clLink - 10%
+
+/* Custom page footer */
+.footer
+	padding 25px 0 50px
+	color #777
+	font-size 11px
+	background clFooterBg
+	if dark( clFooterBg )
+		color clFooterBg + 60%
+	else
+		color clFooterBg - 25%
+
+	.links
+		text-align center
+		> div:first-child
+			text-align left
+		> div:last-child
+			text-align right
+
+	.btn
+	.btn:hover
+	.btn:focus
+		if dark( clFooterBg )
+			color lightText
+		else
+			color darkText
+
+.notfound
+	text-align center
+
+/* Bootstrap overwrites */
+
+.nav-pills > li.active > a
+.nav-pills > li.active > a:hover
+.nav-pills > li.active > a:focus
+	background-color clNavbar
+	if light( clNavbar )
+		color darkText
+	else if dark( clNavbar )
+		color lightText
+	else
+		color clLink
+
+// Desktop & Tablet landscape
+@media (min-width _resp_tablet + 1)
+	/* Remove the padding we set earlier */
+	.header,
+	.footer
+		padding-right 0
+		padding-left 0
+
+// Mobile view
+@media (max-width _resp_mobile)
+
+	.headwrp
+		.user
+			h3
+				display none
+	.footer
+		text-align center
+		.links > div
+			&
+			&:first-child
+			&:last-child
+				text-align center

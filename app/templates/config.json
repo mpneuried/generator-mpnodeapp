@@ -1,0 +1,12 @@
+{
+	"mailservice": {
+		"mailConfig": { 
+			"apikey": "NsDT1hkj439zSffkfj5lsdfgoi83hKJHJsdfu6su37722kjh"
+		}
+	},
+	"passwordless": {
+		"logging": {
+			"severity": "debug"
+		}
+	}
+}
