@@ -3,7 +3,7 @@
 #
 # ### Exports: *Class*
 # 
-# Generic class the handle the standard cases to talk with the milon-st data-api
+# Generic class the handle the standard cases to talk with a external REST api
 
 # **npm modules**
 _ = require( "lodash" )

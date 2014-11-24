@@ -1,0 +1,7 @@
+{% extends "components/_example_layout.html" %}
+
+{% set theme = "blue" %}
+
+{% block example_content %}
+<p><% if( usei18n ){ %>{{ gettext("<% } %>Example component to show template share between server and client<% if( usei18n ){ %>")}}<% } %></p>
+{% endblock %}

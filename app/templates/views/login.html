@@ -1,0 +1,60 @@
+{% extends "layouts/login.html" %}
+
+{% block body %}
+<noscript>
+	<div class="alert alert-warning" role="alert"><% if( usei18n ){ %>{{ gettext("<% } %>Um sich einzuloggen nutzen zu können, müssen JavaScript und Cookies in Ihrem Browser aktiviert sein.<% if( usei18n ){ %>")}}<% } %></div>
+</noscript>
+<div id="logintypes"><% if( addpassworlesslogin ){ %>
+	<div{% if type == "classic" %} style="display:none;"{% endif %} id="login_passwordless">
+		{% if msg == "MAILSEND" %}
+			<div class="infosend">
+				<h3><% if( usei18n ){ %>{{ gettext("<% } %>Prüfen Sie Ihre E-Mails.<% if( usei18n ){ %>")}}<% } %></h3>
+				<p><% if( usei18n ){ %>{{ gettext("<% } %>Wir haben Ihnen den Login-Link an Ihre Adresse geschickt.", mail )}}</p>
+				<a class="btn btn-xs btn-default" href="/login?mail={{mail}}"><% if( usei18n ){ %>{{ gettext("<% } %>Erneut schicken<% if( usei18n ){ %>")}}<% } %></a>
+			</div>
+		{% else %}
+			{% if msg == "TOKEININVALID" %}
+				<p class="text-danger"><% if( usei18n ){ %>{{ gettext("<% } %>Token nicht gültig. Bitter versuchen Sie es erneut<% if( usei18n ){ %>")}}<% } %></p>
+			{% endif %}
+			<form role="form" action="/login/passwordless" method="POST">
+				<div class="form-group">
+					<input type="email" name="email" class="form-control input-lg" id="loginform-email" placeholder="<% if( usei18n ){ %>{{ gettext("<% } %>Ihre E-Mail<% if( usei18n ){ %>")}}<% } %>"{%if mail%} value="{{mail}}"{% endif %} />
+				</div>
+				<button type="submit" class="btn btn-primary btn-lg btn-block"><% if( usei18n ){ %>{{ gettext("<% } %>Anmelden") }}</button>
+				<small class="help-block"><% if( usei18n ){ %>{{ gettext("<% } %>Dadurch wird Ihnen eine E-Mail mit einem Link geschickt über dem Sie sich einloggen können.<% if( usei18n ){ %>")}}<% } %></small>
+			</form>
+		{% endif %}
+		<a class="btn btn-info btn-sm btn-block chngtype" id="changeto_classic"><% if( usei18n ){ %>{{ gettext("<% } %>Klassischer Login") }}</a>
+	</div>
+<% } %>
+	<div{% if type != "classic" %} style="display:none;"{% endif %} id="login_classic" >
+		
+		<form role="form" action="/login" method="POST">
+			</noscript>
+			<div class="form-group">
+				<input type="email" name="email" class="form-control input-lg" id="loginform-email" placeholder="<% if( usei18n ){ %>{{ gettext("<% } %>Ihre E-Mail<% if( usei18n ){ %>")}}<% } %>"{%if mail%} value="{{mail}}"{% endif %} />
+			</div>
+			<div class="form-group">
+				<input type="password" name="password" class="form-control input-lg" id="loginform-pw" placeholder="<% if( usei18n ){ %>{{ gettext("<% } %>Ihr Passwort<% if( usei18n ){ %>")}}<% } %>">
+			</div>
+			{% if msg == "ELOGINFAILED" %}
+				<p class="text-danger"><% if( usei18n ){ %>{{ gettext("<% } %>Login fehlgeschlagen<% if( usei18n ){ %>")}}<% } %></p>
+			{% endif %}
+			<div class="form-group">
+				<div class="checkbox input-sm">
+					<label>
+						<input name="unsafe" type="checkbox"> <% if( usei18n ){ %>{{ gettext("<% } %>Angemeldet bleiben<% if( usei18n ){ %>")}}<% } %> <span id="keeplogin" data-toggle="tooltip" data-placement="bottom" title="<% if( usei18n ){ %>{{ gettext("<% } %>Dies sollte nur an einem sicheren Computer aktiviert werden<% if( usei18n ){ %>")}}<% } %>" class="glyphicon glyphicon-info-sign"></span>
+					</label>
+				</div>
+			</div>
+			{% if redir %}
+			<input type="hidden" class="redir" value="{{redir}}" />
+			{% endif %}
+			<button type="submit" class="btn btn-primary btn-lg btn-block"><% if( usei18n ){ %>{{ gettext("<% } %>Anmelden") }}</button>
+		</form>
+		<% if( addpassworlesslogin ){ %>
+		<a class="btn btn-info btn-sm btn-block chngtype" id="changeto_pwless"><% if( usei18n ){ %>{{ gettext("<% } %>Login ohne Passwort") }}</a>
+		<% } %>
+	</div>
+</div>
+{% endblock %}

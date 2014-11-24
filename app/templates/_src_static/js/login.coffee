@@ -1,8 +1,9 @@
 window.jQuery = jQuery = require( "jquery" )
 Bootstrap = require( "bootstrap" )
-console.log "LOADED"
+
 ( ( $ )->
 	$ ->
+		<% if( addpassworlesslogin ){ %>
 		$Classic = $( "#login_classic" )
 		$Pwless = $( "#login_passwordless" )
 		$( "#logintypes .chngtype" ).on "click", ( evnt )->
@@ -14,6 +15,7 @@ console.log "LOADED"
 				$Classic.hide()
 				$Pwless.show()
 			return
+		<% } %> 
 		$( "#keeplogin" ).tooltip()
 		return
 	return

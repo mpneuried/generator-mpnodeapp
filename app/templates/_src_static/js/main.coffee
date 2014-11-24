@@ -1,12 +1,11 @@
 window.jQuery = jQuery = require( "jquery" )
 Bootstrap = require( "bootstrap" )
+<% if( useclientviews ){ %>
+tmpls = require( "./lib/tmpls" )
 
-modules = []
-modules.push require( "./modules/info" )
-
+<% } %>
 ( ( $ )->
 	$ ->
-		for module in modules
-			module.init()		
+		# your code
 	return
 )( jQuery )

@@ -36,7 +36,7 @@ class APIBase extends require( "mpbasic" )( config )
 	createRoutes: ( basepath, express )=>
 		express.all	"#{basepath}*", @send404
 		return
-
+<% if( usesessions ){ %>	
 	###
 	## _checkAuth
 	
@@ -65,6 +65,7 @@ class APIBase extends require( "mpbasic" )( config )
 				res.redirect( "/login?redir=#{ encodeURIComponent( req.url ) }" )
 		return
 
+<% } %>
 	###
 	## send404
 	
@@ -235,8 +236,8 @@ class APIBase extends require( "mpbasic" )( config )
 	###
 	ERRORS: =>
 		return @extend {}, super, 
-			"EINVALIDURL": [ 404, "Page not found" ]
-			"EUNAUTHORIZED": [ 401, "unauthorized request. Please login" ]
+			"EINVALIDURL": [ 404, "Page not found" ]<% if( usesessions ){ %>
+			"EUNAUTHORIZED": [ 401, "unauthorized request. Please login" ]<% } %>
 
 # export the class
 module.exports = APIBase

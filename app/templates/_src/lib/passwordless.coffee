@@ -18,7 +18,7 @@ class Passwordless extends require( "./redisconnector" )
 			# **tokenLen** *Number* Length of generated token
 			tokenLen: 128
 			# **redisPrefix** *String* token Keys will be prefixed with this string
-			redisPrefix: "milon:pwls:"
+			redisPrefix: "<%= appname %>:pwls:"
 
 	###	
 	## constructor 
@@ -128,8 +128,8 @@ class Passwordless extends require( "./redisconnector" )
 	ERRORS: =>
 		@extend super, 
 			"EINVALIDTOKEN": [ 406, "This token is invalid." ]
-			"ENOUSERID": [ 406, "User id (`<%= uid %>`) not found or invalid." ]
-			"EWRONGEMAIL": [ 406, "The email do mot match each other. Token:`<%= token %>` DB:`<%= db %>`" ]
+			"ENOUSERID": [ 406, "User id (`<<% print('%')%>= uid <% print('%')%>>`) not found or invalid." ]
+			"EWRONGEMAIL": [ 406, "The email do mot match each other. Token:`<<% print('%')%>= token <% print('%')%>>` DB:`<<% print('%')%>= db <% print('%')%>>`" ]
 
 # create the instance and export it.
 module.exports = new Passwordless()

@@ -1,5 +1,5 @@
 # # GUI
-# ### extends [Redisconnector](../lib/apibase.coffee.html)
+# ### extends [API Base](../lib/apibase.coffee.html)
 #
 # ### Exports: *Instance*
 # 
@@ -16,19 +16,21 @@ _ = require( "lodash" )
 config = require( "../lib/config" )
 # [User Model](../model/users.coffee.html)
 userM = require( "../model/users" )
+<% if( addpassworlesslogin ){ %>
 # [Passwordless](../lib/passwordless.coffee.html)
 passwordless = require( "../lib/passwordless" )
 
+<% } %>
 class GUI extends require( "../lib/apibase" )
 
 	# ## defaults
 	defaults: =>
-		@extend super, 
+		@extend super, <% if( !usesessions ){ %>{}<% }else{ %>
 			# **loginSuccessPath** *String* Redirect path if there is already a session
 			loginSuccessPath: "/index.html"
 			# **loginFailedPath** *String* Redirect path if there is already no session
 			loginFailedPath: "/login.html"
-
+			<% } %>
 
 	###
 	## createRoutes
@@ -43,25 +45,70 @@ class GUI extends require( "../lib/apibase" )
 	@api private
 	###
 	createRoutes: ( basepath, router )=>
+		<% if( useserverviews ){ %>
 		# main pages
-		router.get "#{basepath}index.html", @_checkAuth, @index
-		router.get "#{basepath}index", @_checkAuth, @index
-		router.get "#{basepath}", @_checkAuth, @index
-
+		router.get "#{basepath}index.html"<% if( usesessions ){ %>, @_checkAuth<% } %>, @index
+		router.get "#{basepath}index"<% if( usesessions ){ %>, @_checkAuth<% } %>, @index
+		router.get "#{basepath}"<% if( usesessions ){ %>, @_checkAuth<% } %>, @index
+		<% } %>
+		<% if( usesessions ){ %>
+		<% if( addpassworlesslogin ){ %>
 		# passwordless logins
 		router.post "#{basepath}login/passwordless", @passwordless
 		router.get "#{basepath}login/passwordless/:token", @checkToken
-
+		<% } %>
 		# login and exit
 		router.post "#{basepath}login", @login
 		router.get "#{basepath}exit", @exit
 
+		<% if( useserverviews ){ %>
 		# login html
 		router.get "#{basepath}login.html", @loginPage
 		router.get "#{basepath}login", @loginPage
+		<% } %>
+		<% } %>
 		super
 		return
+<% if( useserverviews ){ %>
+	###
+	## index
+	
+	`gui.index( req, res )`
+	
+	Render the index page
+	
+	@param { Request } req Express Request 
+	@param { Response } res Express Response 
+	
+	@api private
+	###
+	index: (req, res)=>
+		<% if( usesessions ){ %>
+		# redirect to the login page if there is no active session
+		if not req?.session?.userid or not req?.session?.role
+			res.redirect( @config.loginFailedPath )
+			return
+		<% } %>
 
+		# get the user
+		userM.get <% if( usesessions ){ %>req.session.userid<% }else{ %>"bbbbb"<% } %>, ( err, userdata )=>
+			if err
+				@_error( res, err )
+				return
+
+			_tmpl = 
+				title: config.get( "server" ).title
+				user: userdata
+				# stringify frontend init data to be able to parse it within the template
+				init: JSON.stringify
+					user: userdata
+
+			res.render('index', _tmpl )
+			return
+		return
+<% } %>
+<% if( usesessions ){ %>
+	<% if( useserverviews ){ %>
 	###
 	## loginPage
 	
@@ -83,43 +130,10 @@ class GUI extends require( "../lib/apibase" )
 		_query = _.pick( req.query, [ "msg", "mail", "type" ] )
 		_query.title = config.get( "server" ).title
 
-		res.render('login_email_pw', _query )
+		res.render('login', _query )
 		return
+	<% } %>
 
-	###
-	## index
-	
-	`gui.index( req, res )`
-	
-	Render the index page
-	
-	@param { Request } req Express Request 
-	@param { Response } res Express Response 
-	
-	@api private
-	###
-	index: (req, res)=>
-		# redirect to the login page if there is no active session
-		if not req?.session?.userid or not req?.session?.role
-			res.redirect( @config.loginFailedPath )
-			return
-
-		# get the user
-		userM.get req.session.userid, ( err, userdata )=>
-			if err
-				@_error( res, err )
-				return
-
-			_tmpl = 
-				title: config.get( "server" ).title
-				user: userdata
-				# stringify frontend init data to be able to parse it within the template
-				init: JSON.stringify
-					user: userdata
-
-			res.render('index', _tmpl )
-			return
-		return
 
 	###
 	## login
@@ -191,7 +205,7 @@ class GUI extends require( "../lib/apibase" )
 		# if no session exists just redirect to login
 		res.redirect( @config.loginFailedPath + "" )
 		return
-
+<% if(addpassworlesslogin){ %>
 	###
 	## passwordless
 	
@@ -247,7 +261,7 @@ class GUI extends require( "../lib/apibase" )
 				return
 			return  
 		return
-
+<% } %>
 	###
 	## _createSession
 	
@@ -276,7 +290,7 @@ class GUI extends require( "../lib/apibase" )
 			cb( null, _.omit( user, [ "password", "isactive" ] ) )
 			return
 		return
-
+<% } %>
 
 # create the instance and export it.
 module.exports = new GUI()

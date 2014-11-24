@@ -16,17 +16,26 @@ _cnfServer = Config.get( "server" )
 
 _cnf = extend( true, {},
 	baseurl: "http://#{_cnfServer.host}:#{_cnfServer.port}#{_cnfServer.basepath}"
+
 	testuser:
 		firstname: null
 		lastname: null
-		email: "mp+plantester@tcs.de"
+	<% if( usesessions ){ %>
+		email: "mytest.user@example.com"
 		pw: "tester"
-		token: "desfire-qaywsxedc4321"
+	<% }else{ %>
+		id: "abcde"
+	<% } %>
 	, _cnf )
 
+<% if( usesessions ){ %>
 root.sessiontoken = null
 root.userid = null
+<% }else{ %>
+root.userid = _cnf.testuser.id
+<% } %>
 
+<% if( usesessions ){ %>
 frisby
 	.create( "Login" )
 	.post( _cnf.baseurl + "api/users/login", email: _cnf.testuser.email, password: _cnf.testuser.pw )
@@ -46,41 +55,25 @@ frisby
 			request:
 				headers: { "Cookie": "#{_cnfServer.appname}=#{root.sessiontoken}" }
 
-		_fnAfterLogin()
+		_startTest()
 		return
 	.toss()
+<% } %>
 
-_fnAfterLogin = ->
-		frisby
-			.create( "GET User" )
-			.get( _cnf.baseurl + "api/users/#{root.userid}")
-			#.inspectBody()
-			.expectStatus( 200 )
-			.expectHeaderContains( "content-type", "application/json" )
-			.expectJSON(
-				id: userid
-				email: _cnf.testuser.email
-			)
-			.toss()
-
-		frisby
-			.create( "GET Devicetype 1" )
-			.get( _cnf.baseurl + "api/devicetypes/1")
-			#.inspectBody()
-			.expectStatus( 200 )
-			.expectHeaderContains( "content-type", "application/json" )
-			.expectJSON( id: 1 )
-			.toss()
-
-		frisby
-			.create( "GET all Devicetypes" )
-			.get( _cnf.baseurl + "api/devicetypes/")
-			#.inspectBody()
-			.expectStatus( 200 )
-			.expectHeaderContains( "content-type", "application/json" )
-			.expectJSONTypes( "*", { id: Number, device_id: String } )
-			.toss()
-
-		
-
+_startTest = ->
+	frisby
+		.create( "GET User" )
+		.get( _cnf.baseurl + "api/users/#{root.userid}")
+		#.inspectBody()
+		.expectStatus( 200 )
+		.expectHeaderContains( "content-type", "application/json" )
+		.expectJSON(
+			id: userid
+			email: _cnf.testuser.email
+		)
+		.toss()
 	return
+	
+<% if( !usesessions ){ %>
+_startTest()
+<% } %>

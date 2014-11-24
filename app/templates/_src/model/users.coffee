@@ -1,4 +1,6 @@
+<% if( usesessions ){ %>
 bcrypt = require( "bcrypt" )
+<% } %>
 _ = require( "lodash" )
 
 config = require( "../lib/config" )
@@ -8,7 +10,7 @@ utils = require( "../lib/utils" )
 class ModelUser extends require( "./_rest_tunnel" )
 
 	urlbase: "/users"
-
+<% if( usesessions ){ %>
 	login: ( email, password, cb )=>
 
 		if not email?.length or not password?.length
@@ -44,7 +46,7 @@ class ModelUser extends require( "./_rest_tunnel" )
 		_delay = utils.randRange( 10, 200 )
 		_.delay( @_handleError, _delay, cb, err, data, errExnd )
 		return
-
+<% if( addpassworlesslogin ){ %>
 	loginPasswordless: ( email, cb )=>
 		if not email?.length
 			@_delayError( cb, "ELOGINFAILED" )
@@ -67,10 +69,11 @@ class ModelUser extends require( "./_rest_tunnel" )
 
 		@request.get( @urlRoot + "login/passwordless", { email: email, linkprefix: _linkprefix } , @_return( "login", _handle ) )
 		return
-
+<% } %>
+<% } %>
 	ERRORS: =>
 		@extend super, 
-			"ENOTFOUND": [ 404, "User not found." ]
-			"ELOGINFAILED": [ 401, "Login faild. Please check your e-mail and password" ]
+			"ENOTFOUND": [ 404, "User not found." ]<% if( usesessions ){ %>
+			"ELOGINFAILED": [ 401, "Login faild. Please check your e-mail and password" ]<% } %>
 
 module.exports = new ModelUser()

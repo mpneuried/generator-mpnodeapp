@@ -22,11 +22,11 @@ express = require( "express" )
 compression = require('compression')
 serveStatic = require('serve-static')
 morgan = require('morgan')
-bodyParser = require('body-parser')
+bodyParser = require('body-parser')<% if( usesessions ){ %>
 cookieParser = require( "cookie-parser" )
-nunjucks = require('nunjucks')
-ConnectRedisSessions = require( "connect-redis-sessions" )
-i18n = require('i18n-abide')
+ConnectRedisSessions = require( "connect-redis-sessions" )<% } %><% if( useserverviews ){ %>
+nunjucks = require('nunjucks')<% } %><% if( usei18n ){ %>
+i18n = require('i18n-abide')<% } %>
 
 # **internal modules**
 # [Config](./lib/config.coffee.html)
@@ -38,7 +38,7 @@ class Server extends require( "mpbasic" )( Config )
 	defaults: =>
 		@extend super,
 			# **port** *Number* The port the server will listen for.
-			port: 8001
+			port: <%= expressport %>
 			# **host** *String* The host of this server. Currently this ist just for info.
 			host: "localhost"
 			# **listenHost** *String* The express listen host
@@ -46,9 +46,9 @@ class Server extends require( "mpbasic" )( Config )
 			# **basepath** *String* Path prefix for all routes.
 			basepath: "/"
 			# **title** *String* Express title
-			title: "MyMilon"
+			title: "<%= appname %>"
 			# **appname** *String* The app name. Used as `redis-session` namespace.
-			appname: "milon-mymilon"
+			appname: "<%= sessionappname %>"
 			# **sessionttl** *Number* session timeout passed to connect-redis-sessions. Default is one month/31 days
 			sessionttl: 1000 * 60 * 60 * 24 * 31
 			# **templateCache** *Boolean* Use the express template cache
@@ -84,19 +84,21 @@ class Server extends require( "mpbasic" )( Config )
 		# set the express modules
 		@express.set( "title", @config.title )
 		@express.use( morgan( expressConf.logger ) )
-		@express.use( compression() )
-		@express.use( cookieParser() )
+		@express.use( compression() )<% if( usesessions ){ %>
+		@express.use( cookieParser() )<% } %>
 		@express.use( bodyParser.json() )
 		@express.use( bodyParser.urlencoded( extended: true ) )
 
 		# serve the static files
 		@express.use( serveStatic( path.resolve( __dirname, "./static" ), maxAge: expressConf.staticCacheTime ) )
-
+		<% if( usesessions ){ %>
 		# configure [connect-redis-sessions](https://github.com/mpneuried/connect-redis-sessions)
 		cnfRedis = Config.get( "redis" )
 		fnCRS = ConnectRedisSessions( app: @config.appname, ttl: Math.round( @config.sessionttl / 1000 ), cookie: { maxAge: @config.sessionttl }, port: cnfRedis.port, host: cnfRedis.host, options: cnfRedis.options )
 		@express.use( fnCRS )
 
+		<% } %>
+		<% if( usei18n ){ %>
 		# configure [i18n-abide](https://github.com/mozilla/i18n-abide)
 		@express.use(i18n.abide({
 			supported_languages: ['en', 'de'],
@@ -104,20 +106,27 @@ class Server extends require( "mpbasic" )( Config )
 			translation_directory: 'i18n'
 		}))
 
+		<% } %>
+		<% if( useserverviews ){ %>
 		# define the [nunjucks](http://mozilla.github.io/nunjucks/) environment
 		nunjucksEnv = nunjucks.configure 'views',
 			autoescape: true
 			express: @express
 			watch: true
 
+		<% } %>
+		<% if( usei18n ){ %>
 		# add middleware to check and set the language
 		@express.use @_setLocale
 
+		<% } %>
+		<% if( useserverviews ){ %>
 		# attach the template renderer to express
 		@express.set('views', path.resolve( __dirname, './views' ))
 		@express.set('view engine', 'html')
 		@express.set('view cache', @config.templateCache )
 
+		<% } %>
 		@emit "configured"
 		return
 
@@ -140,12 +149,12 @@ class Server extends require( "mpbasic" )( Config )
 		# load rest modules 
 		require( "./modules/rest/users" )
 			.createRoutes( "/api/users", @express )
-		require( "./modules/rest/devicetypes" )
-			.createRoutes( "/api/devicetypes", @express )
 		
+		<% if( useserverviews || usesessions ){ %>
 		# add GUI endpoints		
 		@gui = require( "./modules/gui" )
 		@gui.createRoutes( "/", @express )
+		<% } %>
 		
 		# init 404 route
 		@express.all "*", @send404
@@ -198,7 +207,7 @@ class Server extends require( "mpbasic" )( Config )
 
 		@info "start: listen to port #{@config.listenHost}:#{ @config.port }"
 		return
-
+<% if( usei18n ){ %>
 	###
 	## _setLocale
 	
@@ -227,6 +236,7 @@ class Server extends require( "mpbasic" )( Config )
 		next()
 		return
 
+<% } %>
 	###
 	## send404
 	

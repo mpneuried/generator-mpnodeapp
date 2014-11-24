@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ lang }}" dir="{{ lang_dir }}">
+<html<% if( usei18n ){ %> lang="{{ lang }}" dir="{{ lang_dir }}"<% } %>>
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,7 +9,6 @@
 
 		<title>{{title}}</title>
 
-		<link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Montserrat:400,700">
 		<!-- Bootstrap core CSS -->
 		<link href="/css/external.css" rel="stylesheet">
 		<!-- Custom styles for this template -->
@@ -29,7 +28,7 @@
 					-->
 					<div class="user">
 						<div class="userimg" style="background-image:url()"></div>
-						<h3>{{ gettext("Profil") }}: {{user.firstname}} {{user.lastname}}</h3>
+						<h3>{{user.firstname}} {{user.lastname}}</h3>
 
 					</div>
 					<div class="logo">

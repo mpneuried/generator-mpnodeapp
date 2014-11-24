@@ -1,8 +1,0 @@
-<div{% if boxid %} id="{{boxid}}"{% endif %} class="block block-{% if boxsize %}{{boxsize}}{% else %}m{% endif %}{% if boxtheme %} block-{{boxtheme}}{% endif %}{% if positionL %} block-posl-{{positionL}}{% endif %}{% if positionM %} block-posm-{{positionM}}{% endif %}">
-	<div class="block-content">
-		<span class="xlarge">{% block boxcontent %}{% endblock %}</span>
-	</div>
-
-	{% block boxfooter %}{% endblock %}
-</div>
-

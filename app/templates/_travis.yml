@@ -1,0 +1,7 @@
+<% if( useredis ){ %>services:
+	- redis-server
+<% } %>language: node_js
+node_js:
+	- <%= minnodeversion %>
+before_script:
+	- "npm install -g mocha grunt-cli"
