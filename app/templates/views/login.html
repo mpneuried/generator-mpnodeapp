@@ -20,14 +20,14 @@
 				<div class="form-group">
 					<input type="email" name="email" class="form-control input-lg" id="loginform-email" placeholder="<% if( usei18n ){ %>{{ gettext("<% } %>Ihre E-Mail<% if( usei18n ){ %>")}}<% } %>"{%if mail%} value="{{mail}}"{% endif %} />
 				</div>
-				<button type="submit" class="btn btn-primary btn-lg btn-block"><% if( usei18n ){ %>{{ gettext("<% } %>Anmelden") }}</button>
+				<button type="submit" class="btn btn-primary btn-lg btn-block"><% if( usei18n ){ %>{{ gettext("<% } %>Anmelden<% if( usei18n ){ %>")}}<% } %></button>
 				<small class="help-block"><% if( usei18n ){ %>{{ gettext("<% } %>Dadurch wird Ihnen eine E-Mail mit einem Link geschickt über dem Sie sich einloggen können.<% if( usei18n ){ %>")}}<% } %></small>
 			</form>
 		{% endif %}
-		<a class="btn btn-info btn-sm btn-block chngtype" id="changeto_classic"><% if( usei18n ){ %>{{ gettext("<% } %>Klassischer Login") }}</a>
+		<a class="btn btn-info btn-sm btn-block chngtype" id="changeto_classic"><% if( usei18n ){ %>{{ gettext("<% } %>Klassischer Login<% if( usei18n ){ %>")}}<% } %></a>
 	</div>
 <% } %>
-	<div{% if type != "classic" %} style="display:none;"{% endif %} id="login_classic" >
+	<div<% if( addpassworlesslogin ){ %>{% if type != "classic" %} style="display:none;"{% endif %}<% } %> id="login_classic" >
 		
 		<form role="form" action="/login" method="POST">
 			</noscript>
@@ -50,10 +50,10 @@
 			{% if redir %}
 			<input type="hidden" class="redir" value="{{redir}}" />
 			{% endif %}
-			<button type="submit" class="btn btn-primary btn-lg btn-block"><% if( usei18n ){ %>{{ gettext("<% } %>Anmelden") }}</button>
+			<button type="submit" class="btn btn-primary btn-lg btn-block"><% if( usei18n ){ %>{{ gettext("<% } %>Anmelden<% if( usei18n ){ %>")}}<% } %></button>
 		</form>
 		<% if( addpassworlesslogin ){ %>
-		<a class="btn btn-info btn-sm btn-block chngtype" id="changeto_pwless"><% if( usei18n ){ %>{{ gettext("<% } %>Login ohne Passwort") }}</a>
+		<a class="btn btn-info btn-sm btn-block chngtype" id="changeto_pwless"><% if( usei18n ){ %>{{ gettext("<% } %>Login ohne Passwort<% if( usei18n ){ %>")}}<% } %></a>
 		<% } %>
 	</div>
 </div>

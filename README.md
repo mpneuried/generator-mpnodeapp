@@ -58,7 +58,8 @@ If you'd like to get to know Yeoman better and meet some of his friends, [Grunt]
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
-|<%= appversion %>|<%= todaydate %>|Initial commit|
+|0.0.2|2014-11-25|Fixed login form for disabled passwordless option|
+|0.0.1|2014-11-24|Initial commit|
 
 ## License
 
