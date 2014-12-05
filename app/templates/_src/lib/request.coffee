@@ -89,11 +89,10 @@ class HRequest extends require( "mpbasic" )( Config )
 			method: "POST"
 			path: url
 			headers: headers
+			json: data
 
 		_opts.headers = {} if not _opts.headers?
-		_opts.headers[ 'content-length' ] = 0 if not _opts?.headers?[ 'content-length' ]?
 		_opts.headers[ 'content-type' ] = "application/json" if not _opts?.headers?[ 'content-type' ]?
-		_opts.path += if _opts.path.indexOf( "?" ) >= 0 then "&" else "?" + querystring.stringify( data )
 
 		@request( _opts, cb )
 		return
@@ -308,7 +307,23 @@ class HRequest extends require( "mpbasic" )( Config )
 					res.body = JSON.parse( _body )
 			else if _body?.length 
 				res.body = _body
+			
+			if res.statusCode > 300 and res.statusCode <= 400
+				_err = new Error()
+				_err.name = "redirect"
+				_err.message = "TODO: follow redirects in `request` module."
+				_err.statusCode = res.statusCode
+				cb( _err )
+				return
 
+			# handle error if code isnt 200
+			if res.statusCode > 200 and res.statusCode <= 400
+				_err = new Error()
+				_err.name = res.body?.errorcode or "unkonwn"
+				_err.message = res.body?.message or ""
+				_err.statusCode = res.statusCode
+				cb( _err )
+				return
 			cb( null, res ) if cb?
 			return
 
