@@ -17,6 +17,11 @@ request = new ( require( "../lib/request" ) )()
 
 class RestTunnel extends require( "mpbasic" )( Config )
 	
+	defaults: =>
+		return @extend super, 
+			# **cacheTTL** *Number* Standard caching time in seconds
+			cacheTTL: 10000
+
 	# **request** *Request-Instance* Module to make http calls
 	request: request
 
@@ -81,6 +86,7 @@ class RestTunnel extends require( "mpbasic" )( Config )
 			options = {}
 		
 		options.errorOnEmpty = true
+		@emit "get:options", options
 
 		@request.get( @urlRoot + _id, @_return( "get", cb, options ) )
 		return
@@ -213,30 +219,31 @@ class RestTunnel extends require( "mpbasic" )( Config )
 				
 			data = response.body
 
-			if options.errorOnEmpty and ( _.isArray( data ) and not data.length ) or _.isEmpty( data )
+			if options.errorOnEmpty and ( ( _.isArray( data ) and not data.length ) or _.isEmpty( data ) )
 				@_handleError( cb, "ENOTFOUND" )
 				return
 			else if not data?
 				data = []
 		
-			cb( null, @_postProcess( data, options ) )
+			cb( null, @_postProcess( data, type, options ) )
 			return
 
 	###
 	## _postProcess
 	
-	`_rest_tunnel._postProcess( data, options )`
+	`_rest_tunnel._postProcess( data, type, options )`
 	
 	Called on every return to be able to post process the data
 	
 	@param { Object|Array } data Raw data element or list from the data-api 
+	@param { String } type the request type, that was passed in by using `@_return( type, cb, options )`
 	@param { Object } options The used options 
 	
 	@return { Array|Object } The processed data or list
 	
 	@api private
 	###
-	_postProcess: ( data, options )=>
+	_postProcess: ( data, type, options )=>
 		@debug "_postProcess", data, options
 		if _.isArray( data )
 			_ret = []
@@ -244,25 +251,91 @@ class RestTunnel extends require( "mpbasic" )( Config )
 				_ret.push @_postProcess( el, options )
 			return _ret
 
-		return @_postProcessElement( data, options )
+		return @_postProcessElement( data, type, options )
 
 	###
 	## _postProcessElement
 	
-	`_rest_tunnel._postProcessElement( data, options )`
+	`_rest_tunnel._postProcessElement( data, type, options )`
 	
 	Postprocess a element. The method is intended to be overwritten
 	
 	@param { Object|String|Number } data Raw data element from the data-api.
+	@param { String } type the request type, that was passed in by using `@_return( type, cb, options )`
 	@param { Object } options The used options 
 	
 	@return { String } The processed data
 	
 	@api private
 	###
-	_postProcessElement: ( data, options )=>
+	_postProcessElement: ( data, type, options )=>
 		return data
+<% if( usecache ){ %>
+	###
+	## cacheGet
+	
+	`_rest_tunnel.cacheGet( key, cbError, cbCache, cbLoad )`
+	
+	Generic function to handle caching
+	
+	@param { String } key The key to get
+	@param { Function } cbError Called on error
+	@param { Function } cbCache Called on cache hit
+	@param { Function } cbLoad Called on cache miss
 
+	@api private
+	###
+	cacheGet: ( key, cbError, cbCache, cbLoad )=>
+		try
+			if not @cache?
+				# force load if no cach has been defined
+				cbLoad()
+				return
+
+			@cache.get key, ( err, result )=>
+				if err
+					# return an error
+					cbError( err )
+				else if not result
+					# call function to get data from worker
+					cbLoad()
+				else
+					# return cached data
+					if cbCache._async?
+						cbCache( result )
+					else
+						cbCache( null, result )
+				return
+		catch _err
+			@log "error", "get memcache", [ _err ]
+		return
+
+	###
+	## cacheSet
+	
+	`_rest_tunnel.cacheSet( key, data[, ttl ] )`
+	
+	Generic helper to save data to the cache
+	
+	@param { String } key The key to cache the data 
+	@param { String|Number|Array|Object } data The data to cache
+	@param { Number } [key=@config.cacheTTL] Time to live for this key
+	
+	@api private
+	###
+	cacheSet: ( key, data, ttl )=>
+		try
+			if not @cache?
+				# silent exit if cach is not defined
+				return
+
+			@cache.set key, data, ( ttl or @config.cacheTTL ), ->
+				return
+		catch _err
+			@log "error", "set memcache", [ _err ]
+
+		return
+<% } %>
 	###
 	## ERRORS
 	

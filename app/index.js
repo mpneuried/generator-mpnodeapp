@@ -70,6 +70,11 @@ var MpnodeappGenerator = yeoman.generators.Base.extend({
       default: true
     },{
       type: "confirm",
+      name: 'usecache',
+      message: 'Add caching stubs?',
+      default: true
+    },{
+      type: "confirm",
       name: 'useredis',
       message: 'Add redis stubs?',
       default: true
@@ -121,7 +126,7 @@ var MpnodeappGenerator = yeoman.generators.Base.extend({
         props.addpassworlesslogin = false
         props.sessionappname = ""
       }
-      console.log(props);
+      //console.log(props);
       // generic add of promt questions
       for (var _i = 0, _len = prompts.length; _i < _len; _i++) {
         promt = prompts[_i];
@@ -173,6 +178,10 @@ var MpnodeappGenerator = yeoman.generators.Base.extend({
       }
       this.template('_src/modules/rest/restbase.coffee');
       this.template('_src/modules/rest/users.coffee');
+
+      if(this.usecache){
+         this.template('_src/lib/cache.coffee');
+      }
 
       if(this.useredis){
         this.template('_src/lib/redisconnector.coffee');

@@ -32,6 +32,7 @@ describe('mpnodeapp:app', function () {
         '_src/lib/config.coffee',
         '_src/lib/request.coffee',
         '_src/lib/utils.coffee',
+        '_src/lib/cache.coffee',
         '_src/model/_rest_tunnel.coffee',
         '_src/model/users.coffee',
         '_src/modules/gui.coffee',
@@ -88,6 +89,7 @@ describe('mpnodeapp:app', function () {
           useclientviews: false,
           usei18n: false,
           useredis: false,
+          usecache: false,
           usesessions: false,
           addpassworlesslogin: false,
           sessionappname: "xxx",
@@ -123,6 +125,7 @@ describe('mpnodeapp:app', function () {
         '_src/lib/passwordless.coffee',
         '_src/test/main_spec.coffee',
         '_src_static/js/lib/tmpls.coffee',
+        '_src/lib/cache.coffee',
         '_src_static/js/login.coffee',
         '_src_static/css/styl/login.styl',
         '_src_static/jst/base-inherit.html',
@@ -151,6 +154,7 @@ describe('mpnodeapp:app', function () {
       assert.noFileContent('_src/server.coffee', new RegExp( "nunjucksEnv", "gi" ) );
       assert.noFileContent('_src/server.coffee', new RegExp( "i18n\.abide", "gi" ) );
       assert.noFileContent('_src/server.coffee', new RegExp( "ConnectRedisSessions", "gi" ) );
+      assert.noFileContent('_src/model/_rest_tunnel.coffee', new RegExp( "cacheGet", "gi" ) );
     });
   });
 
