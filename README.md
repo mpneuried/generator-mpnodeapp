@@ -58,6 +58,7 @@ If you'd like to get to know Yeoman better and meet some of his friends, [Grunt]
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
+|0.1.1|2015-01-29|Better `.npmignore and prepublish call for `grunt build-dev`; bugfixes|
 |0.1.0|2014-12-05|Added caching stubs and optimized HRequest|
 |0.0.2|2014-11-25|Fixed login form for disabled passwordless option|
 |0.0.1|2014-11-24|Initial commit|

@@ -1,6 +1,6 @@
 {
   "name": "generator-mpnodeapp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "This is a generator to create a basic node.js app skeleton.",
   "license": "MIT",
   "main": "app/index.js",

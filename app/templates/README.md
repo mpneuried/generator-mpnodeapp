@@ -186,6 +186,8 @@ To document the methods of a class please use the [jsdoc-toolkit pattern](https:
 |:--:|:--:|:--|
 |<%= appversion %>|<%= todaydate %>|Initial commit|
 
+> Initially Generated with [generator-mpnodeapp](https://github.com/mpneuried/generator-mpnodeapp)
+
 ## The MIT License (MIT)
 
 Copyright © <%= todayyear %> [<%=githubuser %>](https://github.com/<%=githubuser %>)
