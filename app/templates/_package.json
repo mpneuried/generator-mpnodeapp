@@ -16,8 +16,7 @@
     "url": "https://github.com/<%= githubuser %>/<%= appname %>.git"
   },
   "scripts": {
-    "test": "grunt test",
-    "prepublish": "grunt build-dev"
+    "test": "grunt test"
   },
   "private": <%= isprivate %>,
   "license": "MIT",
