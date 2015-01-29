@@ -58,7 +58,7 @@ If you'd like to get to know Yeoman better and meet some of his friends, [Grunt]
 ## Release History
 |Version|Date|Description|
 |:--:|:--:|:--|
-|0.1.3|2015-01-29|removed prepublish script [npm#3059](https://github.com/npm/npm/issues/3059)|
+|0.1.3|2015-01-29|removed prepublish script [npm#3059](https://github.com/npm/npm/issues/3059) and fixed travis.yml|
 |0.1.2|2015-01-29|Default modulename by current folder|
 |0.1.1|2015-01-29|Better `.npmignore and prepublish call for `grunt build-dev`; bugfixes|
 |0.1.0|2014-12-05|Added caching stubs and optimized HRequest|
