@@ -24,7 +24,7 @@ var MpnodeappGenerator = yeoman.generators.Base.extend({
     },{
       name: 'appname',
       message: 'The name of this app?',
-      default: "appname"
+      default: process.cwd().split(path.sep).pop()
     },{
       name: 'appdesc',
       message: 'The description of this app?',
